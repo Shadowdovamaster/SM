@@ -1,0 +1,734 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.tabs { display: flex; gap: 8px; padding: 1rem 0 1.25rem; }
+.tab { padding: 7px 18px; border: 0.5px solid #14d4c466; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; background: transparent; color: #aaa; }
+.tab.active { background: #06231f; color: #14d4c4; border-color: #14d4c4; }
+
+.brochure { display: none; }
+.brochure.active { display: block; }
+
+.fold-label { font-size: 9px; color: #4a4a4a; letter-spacing: 0.14em; text-transform: uppercase; margin: 0.5rem 0 6px; padding-left: 2px; }
+.trifold { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-radius: 8px; overflow: hidden; border: 0.5px solid #14d4c422; }
+
+.panel { padding: 1.4rem 1.15rem; position: relative; overflow: hidden; min-height: 620px; }
+.panel-a { background: #03100e; }
+.panel-b { background: #050f0d; border-left: 0.5px dashed #14d4c422; border-right: 0.5px dashed #14d4c422; }
+.panel-c { background: #02100f; }
+.panel-label { font-size: 7.5px; color: #2a4a47; letter-spacing: 0.16em; text-transform: uppercase; text-align: center; margin-bottom: 1rem; position: relative; z-index: 5; }
+
+/* ====== COVER PANEL ====== */
+.cover-c { background: #000; padding: 0; }
+.cover-svg-wrap { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+.cover-svg-wrap svg { width: 100%; height: 100%; display: block; }
+.cover-content { position: relative; z-index: 3; padding: 1.4rem 1.15rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 620px; }
+.cover-top { text-align: center; }
+.cover-mid { text-align: center; padding: 0 0.25rem; }
+.cover-bottom { text-align: center; }
+.cover-brand { margin-top: 0.5rem; }
+.cover-brand .solution { font-size: 19px; font-weight: 700; color: #fff; letter-spacing: 0.18em; line-height: 1; font-family: var(--font-sans); text-shadow: 0 0 8px rgba(255,255,255,0.3); }
+.cover-brand .monsters { font-size: 19px; font-weight: 700; color: #aaff3a; letter-spacing: 0.18em; line-height: 1; margin-top: 4px; text-shadow: 0 0 14px #aaff3a66; }
+.scope-pill { display: inline-block; font-size: 9px; letter-spacing: 0.22em; color: #14d4c4; text-transform: uppercase; border: 0.5px solid #14d4c466; padding: 4px 12px; border-radius: 3px; margin-bottom: 1rem; background: rgba(20,212,196,0.08); }
+.cover-headline { font-size: 18px; font-weight: 600; color: #fff; line-height: 1.25; margin-bottom: 0.6rem; }
+.cover-headline span { color: #aaff3a; }
+.cover-sub { font-size: 11px; color: #b0d4cc; line-height: 1.55; margin-bottom: 1rem; }
+.slogan-box { border-top: 0.5px solid #14d4c455; border-bottom: 0.5px solid #14d4c455; padding: 8px 0; margin: 0.5rem 0; }
+.slogan-1 { font-size: 10px; color: #fff; letter-spacing: 0.18em; font-weight: 600; }
+.slogan-2 { font-size: 10px; color: #aaff3a; letter-spacing: 0.18em; font-weight: 700; text-shadow: 0 0 6px #aaff3a44; }
+.trial-num { font-size: 30px; font-weight: 800; color: #aaff3a; line-height: 1; text-shadow: 0 0 14px #aaff3a55; }
+.trial-cap { font-size: 9px; color: #14d4c4; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 4px; }
+.trial-zero { font-size: 10px; color: #88aaa6; margin-top: 6px; }
+.cover-url { font-size: 9px; color: #14d4c4; letter-spacing: 0.18em; margin-top: 0.75rem; font-weight: 600; }
+
+/* ====== SECTION HEADS ====== */
+.section-head { display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #aaff3a; margin-bottom: 0.85rem; padding-bottom: 6px; border-bottom: 0.5px solid #14d4c433; }
+.section-head .num { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: #14d4c4; color: #02100f; font-size: 9px; font-weight: 800; border-radius: 3px; }
+
+/* ====== TALKING APE ====== */
+.ape-wrap { position: relative; display: flex; align-items: flex-end; gap: 8px; margin: 0.5rem 0 1rem; padding: 0.25rem 0; }
+.ape-svg { flex-shrink: 0; width: 90px; height: 110px; }
+.speech-bubble { background: #aaff3a; color: #02100f; font-size: 10.5px; font-weight: 600; line-height: 1.4; padding: 9px 11px; border-radius: 8px; position: relative; flex: 1; box-shadow: 0 0 12px #aaff3a44; }
+.speech-bubble::before { content: ""; position: absolute; left: -7px; top: 22px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 8px solid #aaff3a; }
+.speech-bubble strong { font-weight: 800; }
+
+/* ====== ALL-IN-ONE ITEMS ====== */
+.aio-item { display: flex; gap: 9px; margin-bottom: 0.7rem; align-items: flex-start; }
+.aio-icon { width: 22px; height: 22px; border-radius: 5px; background: #06231f; border: 0.5px solid #14d4c455; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.aio-icon i { font-size: 13px; color: #14d4c4; }
+.aio-text { font-size: 11px; color: #aac9c2; line-height: 1.45; padding-top: 2px; }
+.aio-text strong { color: #fff; font-weight: 600; }
+
+/* ====== VS COMPARISON ====== */
+.vs-table { border: 0.5px solid #14d4c433; border-radius: 6px; overflow: hidden; margin-bottom: 0.85rem; }
+.vs-head { display: grid; grid-template-columns: 1.3fr 1fr 1fr; background: #04201d; border-bottom: 0.5px solid #14d4c433; }
+.vs-head > div { padding: 7px 6px; font-size: 8.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; }
+.vs-head .col-them { color: #ff7878; border-left: 0.5px solid #14d4c422; }
+.vs-head .col-us { color: #aaff3a; border-left: 0.5px solid #14d4c422; }
+.vs-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr; border-bottom: 0.5px solid #14d4c422; }
+.vs-row:last-child { border-bottom: none; }
+.vs-row > div { padding: 6px 7px; font-size: 9.5px; line-height: 1.35; }
+.vs-row .label { color: #cce8e0; font-weight: 500; }
+.vs-row .them { color: #997878; text-align: center; border-left: 0.5px solid #14d4c422; }
+.vs-row .us { color: #aaff3a; text-align: center; border-left: 0.5px solid #14d4c422; font-weight: 600; }
+.vs-row i { font-size: 11px; vertical-align: -1px; }
+
+/* ====== STATS ====== */
+.stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 0.5rem; }
+.stat-card { background: #04201d; border: 0.5px solid #14d4c433; border-radius: 6px; padding: 7px 4px; text-align: center; }
+.stat-num { font-size: 14px; font-weight: 800; color: #aaff3a; line-height: 1; }
+.stat-lbl { font-size: 8px; color: #678; margin-top: 3px; letter-spacing: 0.04em; line-height: 1.3; }
+
+/* ====== QUOTE ====== */
+.quote-box { background: linear-gradient(90deg, #06231f 0%, transparent 100%); border-left: 2px solid #aaff3a; padding: 9px 12px; margin: 0.85rem 0; border-radius: 0 6px 6px 0; }
+.quote-box p { font-size: 10.5px; color: #aaffd8; font-style: italic; line-height: 1.5; }
+
+/* ====== PRICING (tiered) ====== */
+.plan { background: #04201d; border: 0.5px solid #14d4c422; border-radius: 6px; padding: 8px 11px; margin-bottom: 6px; }
+.plan.pop { border: 1px solid #aaff3a; background: #08322a; box-shadow: 0 0 10px #aaff3a22; }
+.plan-top { display: flex; justify-content: space-between; align-items: center; }
+.plan .pn { font-size: 11.5px; font-weight: 600; color: #cceedd; display: flex; align-items: center; gap: 5px; }
+.plan .pu { font-size: 9px; color: #557570; margin-top: 1px; }
+.plan .pp { font-size: 15px; font-weight: 700; color: #14d4c4; text-align: right; }
+.plan .pp span { font-size: 9px; font-weight: 400; color: #557570; }
+.plan.pop .pp { color: #aaff3a; }
+.plan-feats { font-size: 9px; color: #88aa9e; margin-top: 4px; line-height: 1.4; padding-left: 1px; }
+.plan-feats strong { color: #aaff3a; font-weight: 600; }
+.pop-badge { font-size: 8px; background: #aaff3a; color: #02100f; padding: 1px 5px; border-radius: 2px; font-weight: 800; letter-spacing: 0.06em; }
+
+/* ====== INTEGRATIONS ====== */
+.int-grid { display: flex; flex-wrap: wrap; gap: 4px; }
+.int-tag { font-size: 9px; color: #88aa9e; border: 0.5px solid #14d4c433; border-radius: 3px; padding: 2px 7px; background: #03100e; }
+.int-tag.hl { color: #aaff3a; border-color: #aaff3a44; background: #06231f; }
+
+/* ====== INDUSTRY GRID ====== */
+.ind-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.ind-tag { font-size: 9.5px; color: #88aa9e; border: 0.5px solid #14d4c433; border-radius: 3px; padding: 4px 7px; background: #03100e; display: flex; align-items: center; gap: 5px; }
+.ind-tag i { font-size: 11px; color: #14d4c4; flex-shrink: 0; }
+
+/* ====== FEATURES (datasheet) ====== */
+.feature-item { margin-bottom: 0.85rem; }
+.ftitle { font-size: 11.5px; font-weight: 600; color: #e8fff8; margin-bottom: 2px; display: flex; align-items: center; gap: 7px; }
+.ftitle i { font-size: 14px; color: #14d4c4; flex-shrink: 0; }
+.fdesc { font-size: 10.5px; color: #6a8480; line-height: 1.5; padding-left: 21px; }
+
+/* ====== CTA BACK ====== */
+.cta-glow { position: absolute; bottom: 60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, #aaff3a22 0%, transparent 65%); pointer-events: none; }
+.back-mascot { text-align: center; margin: 0.25rem 0 0.75rem; }
+.back-headline { font-size: 17px; font-weight: 700; color: #fff; text-align: center; line-height: 1.25; margin-bottom: 0.4rem; }
+.back-headline span { color: #aaff3a; }
+.back-slogan { text-align: center; font-size: 9.5px; color: #14d4c4; letter-spacing: 0.16em; font-weight: 600; margin-bottom: 0.85rem; }
+.back-slogan span { color: #aaff3a; }
+.back-sub { font-size: 10.5px; color: #88aa9e; text-align: center; line-height: 1.55; margin-bottom: 1rem; }
+.back-cta { display: block; background: linear-gradient(90deg, #aaff3a, #14d4c4); color: #02100f; font-size: 13px; font-weight: 800; padding: 11px 0; border-radius: 6px; text-align: center; margin-bottom: 0.75rem; letter-spacing: 0.06em; text-decoration: none; text-transform: uppercase; }
+.back-checks { display: flex; flex-direction: column; gap: 5px; margin-bottom: 1rem; }
+.back-checks .row { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: #88aa9e; }
+.back-checks i { color: #aaff3a; font-size: 12px; }
+.qr-box { background: #fff; border: 1px solid #aaff3a; border-radius: 6px; padding: 8px; text-align: center; margin: 0.5rem 0; }
+.qr-container { width: 110px; height: 110px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.qr-container img, .qr-container canvas { width: 110px !important; height: 110px !important; display: block; }
+.qr-text { font-size: 8.5px; color: #02100f; letter-spacing: 0.1em; margin-top: 6px; font-weight: 700; }
+.back-contact { text-align: center; font-size: 10px; color: #88aa9e; line-height: 1.7; margin-top: 0.75rem; }
+.back-contact .url { color: #aaff3a; font-weight: 600; }
+</style>
+
+<h2 class="sr-only">SolutionMonsters trifold brochure — sales pitch and feature datasheet versions with cyber branding, talking gorilla mascot, and scannable QR code</h2>
+
+<!-- ==================== SHARED SVG SYMBOLS ==================== -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <!-- Logo gorilla face (cyber style) -->
+    <symbol id="gorilla-logo" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#14d4c4" stroke-width="0.8" opacity="0.6"/>
+      <ellipse cx="50" cy="54" rx="28" ry="30" fill="#0d2520"/>
+      <path d="M 28 32 Q 30 26 36 24 Q 42 22 50 22 Q 58 22 64 24 Q 70 26 72 32 L 70 42 L 30 42 Z" fill="#0d2520"/>
+      <ellipse cx="50" cy="60" rx="20" ry="20" fill="#1a3530"/>
+      <ellipse cx="50" cy="65" rx="14" ry="13" fill="#0a1f1c"/>
+      <ellipse cx="42" cy="50" rx="3.5" ry="4.5" fill="#aaff3a"/>
+      <ellipse cx="58" cy="50" rx="3.5" ry="4.5" fill="#aaff3a"/>
+      <ellipse cx="42" cy="50" rx="1.5" ry="2" fill="#fff"/>
+      <ellipse cx="58" cy="50" rx="1.5" ry="2" fill="#fff"/>
+      <ellipse cx="50" cy="62" rx="3" ry="2" fill="#0a1f1c"/>
+      <path d="M 40 72 Q 50 76 60 72" stroke="#0a1f1c" stroke-width="1.5" fill="none"/>
+      <!-- circuit dots on head -->
+      <circle cx="40" cy="32" r="1" fill="#14d4c4"/>
+      <circle cx="50" cy="28" r="1" fill="#14d4c4"/>
+      <circle cx="60" cy="32" r="1" fill="#14d4c4"/>
+      <circle cx="34" cy="40" r="1" fill="#14d4c4"/>
+      <circle cx="66" cy="40" r="1" fill="#14d4c4"/>
+      <line x1="40" y1="32" x2="50" y2="28" stroke="#14d4c4" stroke-width="0.4"/>
+      <line x1="50" y1="28" x2="60" y2="32" stroke="#14d4c4" stroke-width="0.4"/>
+      <line x1="34" y1="40" x2="40" y2="32" stroke="#14d4c4" stroke-width="0.4"/>
+      <line x1="60" y1="32" x2="66" y2="40" stroke="#14d4c4" stroke-width="0.4"/>
+      <!-- brackets -->
+      <text x="14" y="62" font-family="monospace" font-size="40" font-weight="700" fill="#aaff3a">{</text>
+      <text x="76" y="62" font-family="monospace" font-size="40" font-weight="700" fill="#aaff3a">}</text>
+    </symbol>
+
+    <!-- Worker gorilla (talking) -->
+    <symbol id="worker-ape" viewBox="0 0 100 130">
+      <!-- body -->
+      <ellipse cx="50" cy="78" rx="28" ry="35" fill="#1a3a36"/>
+      <!-- shoulders/arms -->
+      <ellipse cx="22" cy="72" rx="10" ry="14" fill="#1a3a36"/>
+      <ellipse cx="78" cy="72" rx="10" ry="14" fill="#1a3a36"/>
+      <!-- robotic hands -->
+      <circle cx="20" cy="92" r="8" fill="#b8c8c4" stroke="#14d4c4" stroke-width="0.6"/>
+      <circle cx="80" cy="92" r="8" fill="#b8c8c4" stroke="#14d4c4" stroke-width="0.6"/>
+      <circle cx="20" cy="92" r="2" fill="#14d4c4"/>
+      <circle cx="80" cy="92" r="2" fill="#14d4c4"/>
+      <!-- safety vest -->
+      <path d="M 32 60 L 68 60 L 70 110 L 30 110 Z" fill="#ff7a1a"/>
+      <rect x="32" y="78" width="36" height="5" fill="#ffe340"/>
+      <!-- vest straps -->
+      <rect x="40" y="58" width="6" height="20" fill="#ff9a3a"/>
+      <rect x="54" y="58" width="6" height="20" fill="#ff9a3a"/>
+      <!-- pocket -->
+      <rect x="44" y="86" width="12" height="14" fill="none" stroke="#cc5a0a" stroke-width="0.6"/>
+      <!-- head -->
+      <ellipse cx="50" cy="36" rx="22" ry="24" fill="#1a3a36"/>
+      <path d="M 30 22 Q 32 16 38 14 Q 44 12 50 12 Q 56 12 62 14 Q 68 16 70 22 L 68 30 L 32 30 Z" fill="#1a3a36"/>
+      <!-- face -->
+      <ellipse cx="50" cy="40" rx="16" ry="17" fill="#d8e8e4"/>
+      <ellipse cx="50" cy="46" rx="11" ry="11" fill="#b8d4cc"/>
+      <!-- eyes -->
+      <ellipse cx="43" cy="35" rx="2.5" ry="3" fill="#14d4c4"/>
+      <ellipse cx="57" cy="35" rx="2.5" ry="3" fill="#14d4c4"/>
+      <circle cx="43" cy="35" r="1" fill="#fff"/>
+      <circle cx="57" cy="35" r="1" fill="#fff"/>
+      <!-- nose -->
+      <ellipse cx="50" cy="44" rx="2.5" ry="1.8" fill="#8aa5a0"/>
+      <!-- mouth (open, talking) -->
+      <ellipse cx="50" cy="51" rx="5" ry="3" fill="#0a1f1c"/>
+      <ellipse cx="50" cy="50" rx="3" ry="1.2" fill="#d8e8e4"/>
+      <!-- circuit dots on forehead -->
+      <circle cx="44" cy="22" r="0.8" fill="#14d4c4"/>
+      <circle cx="50" cy="20" r="0.8" fill="#14d4c4"/>
+      <circle cx="56" cy="22" r="0.8" fill="#14d4c4"/>
+      <line x1="44" y1="22" x2="50" y2="20" stroke="#14d4c4" stroke-width="0.3"/>
+      <line x1="50" y1="20" x2="56" y2="22" stroke="#14d4c4" stroke-width="0.3"/>
+    </symbol>
+
+    <!-- Cover starfield + circuits scene -->
+    <symbol id="cover-scene" viewBox="0 0 300 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="300" height="600" fill="#000"/>
+      <!-- subtle radial glow center -->
+      <radialGradient id="centerGlow" cx="50%" cy="40%" r="60%">
+        <stop offset="0%" stop-color="#14d4c4" stop-opacity="0.18"/>
+        <stop offset="40%" stop-color="#14d4c4" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>
+      <rect width="300" height="600" fill="url(#centerGlow)"/>
+      <!-- bottom green burst -->
+      <radialGradient id="bottomBurst" cx="50%" cy="100%" r="80%">
+        <stop offset="0%" stop-color="#aaff3a" stop-opacity="0.2"/>
+        <stop offset="50%" stop-color="#aaff3a" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>
+      <rect width="300" height="600" fill="url(#bottomBurst)"/>
+      <!-- stars -->
+      <g fill="#fff">
+        <circle cx="20" cy="40" r="0.6" opacity="0.7"/>
+        <circle cx="55" cy="80" r="0.4" opacity="0.5"/>
+        <circle cx="90" cy="120" r="0.8" opacity="0.8"/>
+        <circle cx="140" cy="50" r="0.5" opacity="0.6"/>
+        <circle cx="200" cy="90" r="0.7" opacity="0.7"/>
+        <circle cx="250" cy="150" r="0.4" opacity="0.5"/>
+        <circle cx="280" cy="60" r="0.6" opacity="0.6"/>
+        <circle cx="40" cy="180" r="0.5" opacity="0.6"/>
+        <circle cx="170" cy="220" r="0.4" opacity="0.5"/>
+        <circle cx="230" cy="270" r="0.6" opacity="0.7"/>
+        <circle cx="60" cy="320" r="0.5" opacity="0.6"/>
+        <circle cx="120" cy="380" r="0.4" opacity="0.5"/>
+        <circle cx="200" cy="420" r="0.7" opacity="0.7"/>
+        <circle cx="270" cy="470" r="0.5" opacity="0.6"/>
+        <circle cx="30" cy="490" r="0.6" opacity="0.7"/>
+        <circle cx="150" cy="540" r="0.4" opacity="0.5"/>
+        <circle cx="220" cy="570" r="0.5" opacity="0.6"/>
+        <circle cx="280" cy="520" r="0.4" opacity="0.5"/>
+      </g>
+      <!-- circuit traces left -->
+      <g stroke="#aaff3a" stroke-width="0.7" fill="none" opacity="0.55">
+        <path d="M 0 180 L 60 180 L 75 195 L 110 195"/>
+        <path d="M 0 220 L 40 220 L 55 235 L 85 235"/>
+        <path d="M 0 260 L 70 260"/>
+        <path d="M 0 330 L 50 330 L 65 315 L 100 315"/>
+      </g>
+      <g fill="#aaff3a" opacity="0.7">
+        <circle cx="110" cy="195" r="1.2"/>
+        <circle cx="85" cy="235" r="1.2"/>
+        <circle cx="70" cy="260" r="1.2"/>
+        <circle cx="100" cy="315" r="1.2"/>
+      </g>
+      <!-- circuit traces right -->
+      <g stroke="#14d4c4" stroke-width="0.7" fill="none" opacity="0.55">
+        <path d="M 300 200 L 240 200 L 225 215 L 190 215"/>
+        <path d="M 300 250 L 250 250 L 235 235 L 200 235"/>
+        <path d="M 300 290 L 230 290"/>
+        <path d="M 300 350 L 250 350 L 235 365 L 200 365"/>
+      </g>
+      <g fill="#14d4c4" opacity="0.7">
+        <circle cx="190" cy="215" r="1.2"/>
+        <circle cx="200" cy="235" r="1.2"/>
+        <circle cx="230" cy="290" r="1.2"/>
+        <circle cx="200" cy="365" r="1.2"/>
+      </g>
+      <!-- bottom curves -->
+      <g stroke="#14d4c4" stroke-width="0.4" fill="none" opacity="0.4">
+        <path d="M 0 540 Q 150 510 300 540"/>
+        <path d="M 0 560 Q 150 530 300 560"/>
+      </g>
+      <!-- left light burst -->
+      <g opacity="0.4">
+        <line x1="0" y1="510" x2="120" y2="450" stroke="#aaff3a" stroke-width="0.5"/>
+        <line x1="0" y1="520" x2="140" y2="480" stroke="#aaff3a" stroke-width="0.4"/>
+        <line x1="0" y1="530" x2="160" y2="500" stroke="#aaff3a" stroke-width="0.3"/>
+        <line x1="0" y1="540" x2="180" y2="520" stroke="#aaff3a" stroke-width="0.3"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('sp', event)">Sales pitch (vs Textura)</button>
+  <button class="tab" onclick="show('ff', event)">Feature datasheet</button>
+</div>
+
+<!-- ===================== SALES PITCH ===================== -->
+<div class="brochure active" id="sp">
+  <div class="fold-label">Outside spread — cover folds in first (right panel)</div>
+  <div class="trifold">
+
+    <!-- INSIDE FLAP — Talking Ape + All-in-one -->
+    <div class="panel panel-a">
+      <div class="panel-label">inside flap</div>
+      <div class="section-head"><span class="num">1</span>Modern solutions</div>
+
+      <div class="ape-wrap">
+        <svg class="ape-svg" viewBox="0 0 100 130"><use href="#worker-ape"/></svg>
+        <div class="speech-bubble">
+          Tired of juggling <strong>5 different apps</strong> to run one job? <strong>SCOPE</strong> puts it all in one place.
+        </div>
+      </div>
+
+      <p style="font-size: 11px; color: #88aa9e; line-height: 1.55; margin-bottom: 0.9rem;">Your CRM, proposals, change orders, dispatching, invoicing, and reporting — every tool your operation needs, working together.</p>
+
+      <div class="aio-item">
+        <div class="aio-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+        <div class="aio-text"><strong>Proposals &amp; estimates</strong> — drag-and-drop editor with polished PDFs clients sign on the spot</div>
+      </div>
+      <div class="aio-item">
+        <div class="aio-icon"><i class="ti ti-writing" aria-hidden="true"></i></div>
+        <div class="aio-text"><strong>Unlimited change orders</strong> — revision history, digital signatures, automated billing calcs</div>
+      </div>
+      <div class="aio-item">
+        <div class="aio-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <div class="aio-text"><strong>Built-in CRM</strong> — companies, contacts, and jobs linked across every record</div>
+      </div>
+      <div class="aio-item">
+        <div class="aio-icon"><i class="ti ti-dashboard" aria-hidden="true"></i></div>
+        <div class="aio-text"><strong>Real-time dashboard</strong> — revenue, pipeline, job health updated live</div>
+      </div>
+      <div class="aio-item">
+        <div class="aio-icon"><i class="ti ti-plug" aria-hidden="true"></i></div>
+        <div class="aio-text"><strong>30+ integrations</strong> — QuickBooks, Stripe, DocuSign, HubSpot, and more</div>
+      </div>
+
+      <div class="quote-box">
+        <p>"Don't let your application dictate how you run your business. Customize SCOPE the way <em>you</em> want it."</p>
+      </div>
+    </div>
+
+    <!-- INSIDE CENTER — Comparison + Stats -->
+    <div class="panel panel-b">
+      <div class="panel-label">inside center</div>
+      <div class="section-head"><span class="num">2</span>Monster performance</div>
+
+      <p style="font-size: 11px; color: #88aa9e; line-height: 1.5; margin-bottom: 0.85rem;">Legacy enterprise tools were built for the 1% of mega-GCs. SCOPE was built for <strong style="color:#aaff3a">you</strong>.</p>
+
+      <div class="vs-table">
+        <div class="vs-head">
+          <div></div>
+          <div class="col-them">Legacy<br>enterprise</div>
+          <div class="col-us">SCOPE</div>
+        </div>
+        <div class="vs-row"><div class="label">Implementation cost</div><div class="them">$100K+</div><div class="us">$0</div></div>
+        <div class="vs-row"><div class="label">Free trial</div><div class="them">None</div><div class="us">3 months</div></div>
+        <div class="vs-row"><div class="label">Time to launch</div><div class="them">Months</div><div class="us">Days</div></div>
+        <div class="vs-row"><div class="label">Proposals &amp; estimates</div><div class="them"><i class="ti ti-x" style="color:#ff5a5a"></i></div><div class="us"><i class="ti ti-check"></i></div></div>
+        <div class="vs-row"><div class="label">Change orders</div><div class="them">Partial</div><div class="us"><i class="ti ti-check"></i></div></div>
+        <div class="vs-row"><div class="label">CRM &amp; contacts</div><div class="them"><i class="ti ti-x" style="color:#ff5a5a"></i></div><div class="us"><i class="ti ti-check"></i></div></div>
+        <div class="vs-row"><div class="label">Dispatch board</div><div class="them"><i class="ti ti-x" style="color:#ff5a5a"></i></div><div class="us"><i class="ti ti-check"></i></div></div>
+        <div class="vs-row"><div class="label">Built for trades</div><div class="them">Generic</div><div class="us">Tailored</div></div>
+        <div class="vs-row"><div class="label">Onboarding</div><div class="them">Self-serve</div><div class="us">White-glove</div></div>
+      </div>
+
+      <div class="section-head" style="margin-top: 1rem;"><span class="num">3</span>The opportunity</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num">$3.7B</div><div class="stat-lbl">Market size</div></div>
+        <div class="stat-card"><div class="stat-num">&lt;2%</div><div class="stat-lbl">Top vendor share</div></div>
+        <div class="stat-card"><div class="stat-num">22+</div><div class="stat-lbl">Trades served</div></div>
+      </div>
+
+      <p style="font-size: 9.5px; color: #557570; line-height: 1.5; margin-top: 0.75rem; text-align: center;">Sources: Grand View Research 2024 · IBISWorld 2024</p>
+    </div>
+
+    <!-- COVER PANEL -->
+    <div class="panel cover-c">
+      <div class="cover-svg-wrap">
+        <svg viewBox="0 0 300 620" preserveAspectRatio="xMidYMid slice"><use href="#cover-scene"/></svg>
+      </div>
+      <div class="cover-content">
+        <div class="cover-top">
+          <div class="panel-label" style="color:#2a4a47;">cover</div>
+          <svg width="130" height="130" viewBox="0 0 100 100" style="display:block; margin: 0.5rem auto;"><use href="#gorilla-logo"/></svg>
+          <div class="cover-brand">
+            <div class="solution">SOLUTION</div>
+            <div class="monsters">MONSTERS</div>
+          </div>
+        </div>
+
+        <div class="cover-mid">
+          <div class="scope-pill">SCOPE Platform</div>
+          <div class="cover-headline">Run your <span>entire</span><br>contracting business —<br>from <span>one platform</span></div>
+          <p class="cover-sub">Proposals · Jobs · Change orders · Financials</p>
+          <div class="slogan-box">
+            <div class="slogan-1">MODERN SOLUTIONS.</div>
+            <div class="slogan-2">MONSTER PERFORMANCE.</div>
+          </div>
+        </div>
+
+        <div class="cover-bottom">
+          <div class="trial-num">3 MO.</div>
+          <div class="trial-cap">FREE TRIAL</div>
+          <div class="trial-zero">$0 to start · No credit card</div>
+          <div class="cover-url">SOLUTIONMONSTERS.COM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIDE SPREAD -->
+  <div class="fold-label" style="margin-top: 1.5rem;">Inside spread — full panorama when unfolded</div>
+  <div class="trifold">
+
+    <!-- BACK LEFT — Pricing tiers (corrected) -->
+    <div class="panel panel-a">
+      <div class="panel-label">inside left</div>
+      <div class="section-head"><span class="num">4</span>Pricing that scales with you</div>
+      <p style="font-size: 10.5px; color: #88aa9e; line-height: 1.5; margin-bottom: 0.85rem;">Every plan includes core features and a free workflow consultation. Unlock advanced tools as you grow.</p>
+
+      <div class="plan">
+        <div class="plan-top">
+          <div><div class="pn">Starter</div><div class="pu">Up to 3 users</div></div>
+          <div class="pp">$149<span>/mo</span></div>
+        </div>
+        <div class="plan-feats">Core: proposals, change orders, CRM, dashboard</div>
+      </div>
+      <div class="plan">
+        <div class="plan-top">
+          <div><div class="pn">Growth</div><div class="pu">Up to 7 users</div></div>
+          <div class="pp">$249<span>/mo</span></div>
+        </div>
+        <div class="plan-feats"><strong>+</strong> RFIs, Submittals, Gantt, Bid Leveling, Client Portal, Stripe</div>
+      </div>
+      <div class="plan pop">
+        <div class="plan-top">
+          <div><div class="pn">Pro <span class="pop-badge">POPULAR</span></div><div class="pu">Up to 15 users</div></div>
+          <div class="pp">$349<span>/mo</span></div>
+        </div>
+        <div class="plan-feats"><strong>+</strong> Full financial reporting (9 reports), custom roles, audit log</div>
+      </div>
+      <div class="plan">
+        <div class="plan-top">
+          <div><div class="pn">Business</div><div class="pu">Up to 50 users</div></div>
+          <div class="pp">$599<span>/mo</span></div>
+        </div>
+        <div class="plan-feats"><strong>+</strong> Volume support priority</div>
+      </div>
+      <div class="plan">
+        <div class="plan-top">
+          <div><div class="pn">Enterprise</div><div class="pu">Unlimited users</div></div>
+          <div class="pp" style="font-size: 11px;">Custom</div>
+        </div>
+        <div class="plan-feats"><strong>+</strong> Custom integrations, API, white-glove migration, account manager</div>
+      </div>
+
+      <p style="font-size: 9px; color: #557570; line-height: 1.5; margin-top: 0.5rem;">Annual saves 2 months. Cancel anytime.</p>
+    </div>
+
+    <!-- INSIDE RIGHT — Industries + Integrations -->
+    <div class="panel panel-b">
+      <div class="panel-label">inside right</div>
+      <div class="section-head"><span class="num">5</span>Built for your trade</div>
+      <div class="ind-grid">
+        <div class="ind-tag"><i class="ti ti-building" aria-hidden="true"></i>General contracting</div>
+        <div class="ind-tag"><i class="ti ti-snowflake" aria-hidden="true"></i>HVAC</div>
+        <div class="ind-tag"><i class="ti ti-bolt" aria-hidden="true"></i>Electrical</div>
+        <div class="ind-tag"><i class="ti ti-droplet" aria-hidden="true"></i>Plumbing</div>
+        <div class="ind-tag"><i class="ti ti-home" aria-hidden="true"></i>Roofing</div>
+        <div class="ind-tag"><i class="ti ti-tools" aria-hidden="true"></i>Framing</div>
+        <div class="ind-tag"><i class="ti ti-stack-2" aria-hidden="true"></i>Concrete</div>
+        <div class="ind-tag"><i class="ti ti-plant" aria-hidden="true"></i>Landscaping</div>
+        <div class="ind-tag"><i class="ti ti-bug" aria-hidden="true"></i>Pest control</div>
+        <div class="ind-tag"><i class="ti ti-rectangle-vertical" aria-hidden="true"></i>Drywall</div>
+        <div class="ind-tag"><i class="ti ti-bricks" aria-hidden="true"></i>Masonry</div>
+        <div class="ind-tag"><i class="ti ti-flame" aria-hidden="true"></i>Fire protection</div>
+        <div class="ind-tag"><i class="ti ti-paint" aria-hidden="true"></i>Painting</div>
+        <div class="ind-tag"><i class="ti ti-grid-dots" aria-hidden="true"></i>Flooring</div>
+        <div class="ind-tag"><i class="ti ti-sparkles" aria-hidden="true"></i>Cleaning</div>
+        <div class="ind-tag"><i class="ti ti-dots" aria-hidden="true"></i>+7 more</div>
+      </div>
+
+      <div class="section-head" style="margin-top: 1.25rem;"><span class="num">6</span>Plays nice with your stack</div>
+      <div class="int-grid">
+        <span class="int-tag hl">QuickBooks</span><span class="int-tag hl">Stripe</span><span class="int-tag">DocuSign</span>
+        <span class="int-tag">HubSpot</span><span class="int-tag">Salesforce</span><span class="int-tag">Zapier</span>
+        <span class="int-tag">CompanyCam</span><span class="int-tag">Gusto</span><span class="int-tag">Slack</span>
+        <span class="int-tag">Mailchimp</span><span class="int-tag">Samsara</span><span class="int-tag">Twilio</span>
+        <span class="int-tag">Google Calendar</span><span class="int-tag">Outlook</span><span class="int-tag">+15 more</span>
+      </div>
+    </div>
+
+    <!-- BACK RIGHT — CTA + Real QR -->
+    <div class="panel panel-c">
+      <div class="cta-glow"></div>
+      <div class="panel-label">back panel</div>
+
+      <div class="back-mascot">
+        <svg width="100" height="100" viewBox="0 0 100 100"><use href="#gorilla-logo"/></svg>
+      </div>
+
+      <div class="back-headline">Let's put it<br>to <span>work</span></div>
+      <div class="back-slogan">MODERN SOLUTIONS. <span>MONSTER PERFORMANCE.</span></div>
+      <p class="back-sub">No-pressure walkthrough with a specialist who knows contracting.</p>
+
+      <a href="https://solutionmonsters.com/demo/" class="back-cta">Book My Demo →</a>
+
+      <div class="back-checks">
+        <div class="row"><i class="ti ti-check" aria-hidden="true"></i>3-month free trial</div>
+        <div class="row"><i class="ti ti-check" aria-hidden="true"></i>$0 to start</div>
+        <div class="row"><i class="ti ti-check" aria-hidden="true"></i>No credit card required</div>
+      </div>
+
+      <div class="qr-box">
+        <div class="qr-container" id="qr-sp"></div>
+        <div class="qr-text">SCAN TO BOOK YOUR DEMO</div>
+      </div>
+
+      <div class="back-contact">
+        <div class="url">solutionmonsters.com</div>
+        <div style="font-size: 9px; color: #557570;">info@solutionmonsters.com</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FEATURE DATASHEET ===================== -->
+<div class="brochure" id="ff">
+  <div class="fold-label">Outside spread — cover folds in first (right panel)</div>
+  <div class="trifold">
+
+    <!-- INSIDE FLAP — Core Features -->
+    <div class="panel panel-a">
+      <div class="panel-label">inside flap</div>
+      <div class="section-head"><span class="num">A</span>Core features</div>
+
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-file-text" aria-hidden="true"></i>Proposals &amp; estimates</div><div class="fdesc">Drag-and-drop editor, built-in checklists, polished PDFs. Magic-link signing for clients.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-writing" aria-hidden="true"></i>Change order tracking</div><div class="fdesc">Unlimited COs per job with revision history, digital signatures, automated billing.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-users" aria-hidden="true"></i>CRM &amp; contacts</div><div class="fdesc">Companies, contacts, and employees linked to active jobs. Searchable across records.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-dashboard" aria-hidden="true"></i>Real-time dashboard</div><div class="fdesc">Live revenue, billing stats, open jobs, year-over-year comparisons.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-clipboard-check" aria-hidden="true"></i>Qualification templates</div><div class="fdesc">Reusable checklist templates by trade type, attached to proposals automatically.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-receipt" aria-hidden="true"></i>Invoicing</div><div class="fdesc">Generate invoices from jobs and proposals. Track payment status. Send reminders.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-id-badge" aria-hidden="true"></i>Employee &amp; team management</div><div class="fdesc">Role-based access (Admin, Manager, User), employee profiles, team visibility controls.</div></div>
+    </div>
+
+    <!-- INSIDE CENTER — Advanced + Mobile -->
+    <div class="panel panel-b">
+      <div class="panel-label">inside center</div>
+      <div class="section-head"><span class="num">B</span>Advanced (Growth+)</div>
+
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-layout-columns" aria-hidden="true"></i>Bid leveling &amp; RFP</div><div class="fdesc">Side-by-side subcontractor bid comparison with secure vendor portal and reminders.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-file-import" aria-hidden="true"></i>RFIs, submittals &amp; releases</div><div class="fdesc">Full construction document workflow built into your jobs.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-calendar-event" aria-hidden="true"></i>Gantt &amp; calendar</div><div class="fdesc">Visual project timelines with calendar sync for office and field teams.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-user-circle" aria-hidden="true"></i>Client portal</div><div class="fdesc">Clients view proposals, approve change orders, check job status online.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-credit-card" aria-hidden="true"></i>Stripe payment collection</div><div class="fdesc">Accept credit cards and ACH directly through proposals and invoices.</div></div>
+
+      <div class="section-head" style="margin-top: 1rem;"><span class="num">C</span>Pro tier additions</div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-report-money" aria-hidden="true"></i>Full financial reporting</div><div class="fdesc">9 reports including P&amp;L by job, pipeline value, CSV export — no separate BI tool.</div></div>
+      <div class="feature-item"><div class="ftitle"><i class="ti ti-lock" aria-hidden="true"></i>Custom roles &amp; audit log</div><div class="fdesc">Define custom permissions per user. Full audit trail of every action.</div></div>
+    </div>
+
+    <!-- COVER -->
+    <div class="panel cover-c">
+      <div class="cover-svg-wrap">
+        <svg viewBox="0 0 300 620" preserveAspectRatio="xMidYMid slice"><use href="#cover-scene"/></svg>
+      </div>
+      <div class="cover-content">
+        <div class="cover-top">
+          <div class="panel-label" style="color:#2a4a47;">cover</div>
+          <svg width="130" height="130" viewBox="0 0 100 100" style="display:block; margin: 0.5rem auto;"><use href="#gorilla-logo"/></svg>
+          <div class="cover-brand">
+            <div class="solution">SOLUTION</div>
+            <div class="monsters">MONSTERS</div>
+          </div>
+        </div>
+
+        <div class="cover-mid">
+          <div class="scope-pill">SCOPE Datasheet</div>
+          <div class="cover-headline">Field service<br>management.<br><span>Reimagined.</span></div>
+          <p class="cover-sub">Platform overview · Features · Pricing</p>
+          <div class="slogan-box">
+            <div class="slogan-1">MODERN SOLUTIONS.</div>
+            <div class="slogan-2">MONSTER PERFORMANCE.</div>
+          </div>
+        </div>
+
+        <div class="cover-bottom">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 0.5rem;">
+            <div class="stat-card"><div class="stat-num">30+</div><div class="stat-lbl">Integrations</div></div>
+            <div class="stat-card"><div class="stat-num">22+</div><div class="stat-lbl">Trades</div></div>
+          </div>
+          <div class="cover-url">SOLUTIONMONSTERS.COM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIDE SPREAD -->
+  <div class="fold-label" style="margin-top: 1.5rem;">Inside spread — full panorama when unfolded</div>
+  <div class="trifold">
+
+    <!-- INSIDE LEFT — Pricing -->
+    <div class="panel panel-a">
+      <div class="panel-label">inside left</div>
+      <div class="section-head"><span class="num">D</span>Pricing</div>
+
+      <div class="plan">
+        <div class="plan-top"><div><div class="pn">Starter</div><div class="pu">Up to 3 users</div></div><div class="pp">$149<span>/mo</span></div></div>
+        <div class="plan-feats">Core: proposals, change orders, CRM, dashboard</div>
+      </div>
+      <div class="plan">
+        <div class="plan-top"><div><div class="pn">Growth</div><div class="pu">Up to 7 users</div></div><div class="pp">$249<span>/mo</span></div></div>
+        <div class="plan-feats"><strong>+</strong> RFIs, Gantt, Bid Leveling, Client Portal, Stripe</div>
+      </div>
+      <div class="plan pop">
+        <div class="plan-top"><div><div class="pn">Pro <span class="pop-badge">POPULAR</span></div><div class="pu">Up to 15 users</div></div><div class="pp">$349<span>/mo</span></div></div>
+        <div class="plan-feats"><strong>+</strong> Full financial reporting, custom roles, audit log</div>
+      </div>
+      <div class="plan">
+        <div class="plan-top"><div><div class="pn">Business</div><div class="pu">Up to 50 users</div></div><div class="pp">$599<span>/mo</span></div></div>
+        <div class="plan-feats"><strong>+</strong> Volume support priority</div>
+      </div>
+      <div class="plan">
+        <div class="plan-top"><div><div class="pn">Enterprise</div><div class="pu">Unlimited</div></div><div class="pp" style="font-size: 11px;">Custom</div></div>
+        <div class="plan-feats"><strong>+</strong> API, white-glove migration, account manager</div>
+      </div>
+
+      <div class="section-head" style="margin-top: 1rem;"><span class="num">E</span>Our approach</div>
+      <div class="aio-item"><div class="aio-icon"><i class="ti ti-number-1" aria-hidden="true"></i></div><div class="aio-text"><strong>Discovery</strong> — we learn your workflows first</div></div>
+      <div class="aio-item"><div class="aio-icon"><i class="ti ti-number-2" aria-hidden="true"></i></div><div class="aio-text"><strong>Tailored config</strong> — set up around your trade</div></div>
+      <div class="aio-item"><div class="aio-icon"><i class="ti ti-number-3" aria-hidden="true"></i></div><div class="aio-text"><strong>Data migration</strong> — records moved cleanly</div></div>
+      <div class="aio-item"><div class="aio-icon"><i class="ti ti-number-4" aria-hidden="true"></i></div><div class="aio-text"><strong>Team training</strong> — role-specific by specialists</div></div>
+    </div>
+
+    <!-- INSIDE RIGHT — Integrations grouped -->
+    <div class="panel panel-b">
+      <div class="panel-label">inside right</div>
+      <div class="section-head"><span class="num">F</span>30+ integrations</div>
+      <p style="font-size: 10.5px; color: #88aa9e; line-height: 1.5; margin-bottom: 0.85rem;">Your data flows automatically. Your team stays focused on work.</p>
+
+      <div style="margin-bottom: 0.7rem;">
+        <div style="font-size: 9px; color: #557570; letter-spacing: 0.08em; margin-bottom: 5px; text-transform: uppercase;">Accounting &amp; payments</div>
+        <div class="int-grid">
+          <span class="int-tag hl">QuickBooks</span><span class="int-tag hl">Stripe</span><span class="int-tag">Xero</span>
+          <span class="int-tag">Square</span><span class="int-tag">Wisetack</span><span class="int-tag">Gusto</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 0.7rem;">
+        <div style="font-size: 9px; color: #557570; letter-spacing: 0.08em; margin-bottom: 5px; text-transform: uppercase;">CRM &amp; sales</div>
+        <div class="int-grid">
+          <span class="int-tag">HubSpot</span><span class="int-tag">Salesforce</span><span class="int-tag">Mailchimp</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 0.7rem;">
+        <div style="font-size: 9px; color: #557570; letter-spacing: 0.08em; margin-bottom: 5px; text-transform: uppercase;">Lead sources</div>
+        <div class="int-grid">
+          <span class="int-tag">Angi</span><span class="int-tag">Thumbtack</span><span class="int-tag">Houzz Pro</span><span class="int-tag">Google LSA</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 9px; color: #557570; letter-spacing: 0.08em; margin-bottom: 5px; text-transform: uppercase;">Comms &amp; ops</div>
+        <div class="int-grid">
+          <span class="int-tag">DocuSign</span><span class="int-tag">CompanyCam</span><span class="int-tag">Slack</span>
+          <span class="int-tag">Twilio</span><span class="int-tag">Podium</span><span class="int-tag">NiceJob</span>
+          <span class="int-tag">CHIIRP</span><span class="int-tag">Broadly</span><span class="int-tag">Samsara</span>
+          <span class="int-tag">Google Calendar</span><span class="int-tag">Outlook</span><span class="int-tag">Zapier</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACK RIGHT — CTA + Real QR -->
+    <div class="panel panel-c">
+      <div class="cta-glow"></div>
+      <div class="panel-label">back panel</div>
+
+      <div class="back-mascot">
+        <svg width="100" height="100" viewBox="0 0 100 100"><use href="#gorilla-logo"/></svg>
+      </div>
+
+      <div class="back-headline">See SCOPE<br><span>in action</span></div>
+      <div class="back-slogan">MODERN SOLUTIONS. <span>MONSTER PERFORMANCE.</span></div>
+      <p class="back-sub">Personalized demo from a field service specialist. Walk through your exact workflows.</p>
+
+      <a href="https://solutionmonsters.com/demo/" class="back-cta">Book My Demo →</a>
+
+      <div class="back-checks">
+        <div class="row"><i class="ti ti-check" aria-hidden="true"></i>3-month free trial</div>
+        <div class="row"><i class="ti ti-check" aria-hidden="true"></i>Free workflow consultation</div>
+        <div class="row"><i class="ti ti-check" aria-hidden="true"></i>White-glove data migration</div>
+      </div>
+
+      <div class="qr-box">
+        <div class="qr-container" id="qr-ff"></div>
+        <div class="qr-text">SCAN TO BOOK YOUR DEMO</div>
+      </div>
+
+      <div class="back-contact">
+        <div class="url">solutionmonsters.com</div>
+        <div style="font-size: 9px; color: #557570;">info@solutionmonsters.com</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+function show(id, e) {
+  document.querySelectorAll('.brochure').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.target.classList.add('active');
+}
+
+// Generate real scannable QR codes for both brochures
+function makeQR(elId) {
+  var el = document.getElementById(elId);
+  if (el && typeof QRCode !== 'undefined') {
+    el.innerHTML = '';
+    new QRCode(el, {
+      text: 'https://solutionmonsters.com/',
+      width: 110,
+      height: 110,
+      colorDark: '#02100f',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+}
+makeQR('qr-sp');
+makeQR('qr-ff');
+</script>
